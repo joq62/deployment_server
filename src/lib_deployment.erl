@@ -82,6 +82,9 @@ init(RepoDir,GitPath)->
     case git_handler:is_repo_updated(RepoDir) of
 	{error,["RepoDir doesnt exists, need to clone"]}->
 	    ok=git_handler:clone(RepoDir,GitPath);
+	{error,"fatal: not a git repository (or any of the parent directories): .git,Not up to date"}->
+	    file:del_dir_r(RepoDir),
+	      ok=git_handler:clone(RepoDir,GitPath);
 	false ->
 	    ok=git_handler:update_repo(RepoDir);
 	true ->
